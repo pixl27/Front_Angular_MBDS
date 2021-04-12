@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import { Assignment } from '../assignments/assignment.model';
+import { Matiere } from '../matieres/matiere.model';
+
 import { LoggingService } from './logging.service';
 import { assignmentsGeneres } from './data';
 
@@ -11,11 +13,19 @@ import { assignmentsGeneres } from './data';
 })
 export class AssignmentsService {
   assignments:Assignment[];
+  matieres:Matiere[];
 
   constructor(private loggingService:LoggingService, private http:HttpClient) { }
 
   //uri = "http://localhost:8010/api/assignments";
   uri = "https://backendmdbs.herokuapp.com/api/assignments"
+  urimatiere = "https://backendmdbs.herokuapp.com/api/matieres"
+
+  getMatieres():Observable<Matiere[]> {
+    console.log("Dans le service de gestion des matieres...")
+    //return of(this.matieres);
+    return this.http.get<Matiere[]>(this.urimatiere);
+  }
 
   getAssignments():Observable<Assignment[]> {
     console.log("Dans le service de gestion des assignments...")
@@ -45,7 +55,7 @@ export class AssignmentsService {
     .pipe(
       // traitement 1
       map(a => {
-        a.nom += " MODIFIE PAR MAP";
+        a.nom += "";
         return a;
       }),
       tap(a => {

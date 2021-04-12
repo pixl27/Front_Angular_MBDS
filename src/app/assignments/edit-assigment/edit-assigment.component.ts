@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../assignment.model';
+import {FormBuilder,FormGroup , Validators} from '@angular/forms';
+import { Matiere } from 'src/app/matieres/matiere.model';
 
 @Component({
   selector: 'app-edit-assigment',
@@ -12,13 +14,23 @@ export class EditAssigmentComponent implements OnInit {
   assignment:Assignment;
 
   // pour le formulaire
-  nom = "";
+  nom = '';
+  matiere = '';
+  auteur = '';
+  note = null;
+  remarque = null;
+  listeMatieres = [];
   dateDeRendu = null;
+  isLinear = true;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+
 
   constructor(
     private assignmentsService: AssignmentsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +38,26 @@ export class EditAssigmentComponent implements OnInit {
     // par ex de :
     // http://localhost:4200/assignment/1/edit?nom=Michel%20Buffa&metier=Professeur&responsable=MIAGE#edition
 
+    this.assignmentsService.getMatieres()
+    .subscribe(matieres => {
+        this.listeMatieres = matieres as Matiere[]
+    })
+    
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required],
+      firstCtrl2: ['', Validators.required],
+      firstCtrl3: ['', Validators.required]
+
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required],
+      secondCtrl2: ['', Validators.compose(
+        [Validators.min(0), Validators.max(20)])],
+      secondCtrl3: ['']
+
+
+    });
+    
     console.log(this.route.snapshot.queryParams);
     console.log(this.route.snapshot.fragment);
 
@@ -43,6 +75,11 @@ export class EditAssigmentComponent implements OnInit {
 
       this.nom = assignment.nom;
       this.dateDeRendu = assignment.dateDeRendu;
+      this.auteur = assignment.auteur;
+      this.note = assignment.note;
+      this.remarque = assignment.remarque;
+      this.matiere = assignment.matiere;
+
     });
   }
 
@@ -53,6 +90,10 @@ export class EditAssigmentComponent implements OnInit {
 
     this.assignment.nom = this.nom;
     this.assignment.dateDeRendu = this.dateDeRendu;
+    this.assignment.auteur =    this.auteur 
+    this.assignment.note =   this.note 
+    this.assignment.remarque = this.remarque 
+    this.assignment.matiere =  this.matiere 
 
     this.assignmentsService.updateAssignment(this.assignment)
       .subscribe(message => {

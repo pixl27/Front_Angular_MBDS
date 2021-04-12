@@ -1,18 +1,70 @@
-<form ngForm #formAssignment class="form" (submit)="onSubmit($event); formAssignment.reset();">
-  <mat-form-field>
-    <input matInput placeholder="Nom du devoir" required [(ngModel)]="nom" name="nom">
-  </mat-form-field>
+ <form ngForm #formAssignment class="form"  (submit)="onSubmit($event); formAssignment.reset();">
+      
+  <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Choisissez une date</mat-label>
-    <input matInput [matDatepicker]="picker" required [(ngModel)]="dateDeRendu" name="date">
+    <mat-step [stepControl]="firstFormGroup">
+      <ng-form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Remplir le nom du devoir</ng-template>
+        <div>
+        <mat-form-field>
+          <input matInput placeholder="Nom du devoir"   required [(ngModel)]="nom" formControlName="firstCtrl" name="nom">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput placeholder="Nom de eleve"  required [(ngModel)]="auteur" formControlName="firstCtrl3" name="auteur">
+        </mat-form-field>
+      </div>
+        <div>
+        <mat-form-field appearance="fill">
+         
+          <mat-label>Choisissez une date</mat-label>
+          <input matInput [matDatepicker]="picker" required [(ngModel)]="dateDeRendu" formControlName="firstCtrl2" name="date">
+      
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      
+          <mat-datepicker #picker></mat-datepicker>
 
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        </mat-form-field>
+      </div>
+        <div>
+          <button type="button"  mat-button matStepperNext>Next</button>
+        </div>
+      </ng-form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <ng-form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Assigner un matiere a ce devoir</ng-template>
+        <h4>Basic native select</h4>
 
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-select [(ngModel)]="matiere" formControlName="secondCtrl">
+              <mat-option *ngFor="let matiere of listeMatieres" [value]="matiere._id">
+                {{matiere.nom}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <div>
+          <button type="button" mat-button matStepperNext>Next</button>
+        </div>
+      </ng-form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button type="button"  mat-button  matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button type="button"  type="submit" mat-stroked-button color="primary">
+          Ajouter un devoir
+        </button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+ 
 
-  <button mat-stroked-button color="primary">
-    Ajouter un devoir
-  </button>
+    
+
+
+
 </form>
