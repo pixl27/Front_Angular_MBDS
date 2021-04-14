@@ -1,4 +1,4 @@
-<main class="container">
+
   <a routerLink="/add" class="ajouterBtn">
     <button mat-flat-button color="accent">
       Ajouter un assignment
@@ -60,9 +60,88 @@
       </mat-list>
 
     </mat-tab>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #content>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Veuillez noter cette eleve</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form   (ngSubmit)="updatenote($event)">
+
+          <div class="modal-body">
+            Notez cette personne pour que le devoir soit rendu
+            <input type="number" [(ngModel)]="note" name="note">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closemodal()" data-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Confirmer</button>
+          </div>
+        </form>
+
+        </div>
+      </div>
+    </div>
     <mat-tab label="Non Rendu">
-      <mat-list *ngFor="let a of assignmentsNR">
-        <mat-card  class="example-card">
+      <div class="example-container">
+        <h2>Done</h2>
+      
+        <div
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="done"
+          [cdkDropListConnectedTo]="[todoList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <mat-list *ngFor="let b of done" >
+            <mat-card  class="example-card" cdkDrag>
+              <mat-card-header>
+                <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url(../../assets/image/' +b.profimage+')','background-size': 'cover'}"></div>
+                <mat-card-title>{{b.nom}}</mat-card-title>
+                <mat-card-subtitle>{{b.auteur}}</mat-card-subtitle>
+              </mat-card-header>
+              <img
+                mat-card-image
+                src="../../assets/image/{{b.matiereimage}}"
+                alt="Photo of a Shiba Inu"
+              />
+              <mat-card-content>
+                <mat-list-item>
+                  <mat-divider></mat-divider>
+                  <p *ngIf="b.rendu; else nonsoumis" appRendu>
+                    {{b.nom}}, rendu par l'élève.
+                  </p>
+                  <ng-template #nonsoumis>
+                    <p appNonRendu>
+                      {{b.nom}}, non encore rendu par l'élève.
+                    </p>
+                  </ng-template>
+        
+                </mat-list-item>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button> <a routerLink="/assignment/{{b.id}}">
+                  <h3 mat-subheader>Detail
+                  </h3>
+          
+                </a></button>
+              </mat-card-actions>
+            </mat-card>
+        </mat-list>
+        </div>
+      </div>
+      <div
+    cdkDropList
+    #todoList="cdkDropList"
+    [cdkDropListData]="assignmentsNR"
+    [cdkDropListConnectedTo]="[doneList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+      <mat-list *ngFor="let a of assignmentsNR" >
+        <mat-card  class="example-card" cdkDrag>
           <mat-card-header>
             <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url(../../assets/image/' +a.profimage+')','background-size': 'cover'}"></div>
             <mat-card-title>{{a.nom}}</mat-card-title>
@@ -96,8 +175,11 @@
           </mat-card-actions>
         </mat-card>
     </mat-list>
+
+  </div>
+ 
     </mat-tab>
+
   </mat-tab-group>
 
   
-</main>

@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Matiere } from '../matieres/matiere.model';
 import { AssignmentsService } from '../shared/assignments.service';
 import { Assignment } from './assignment.model';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+  CdkDrag
+} from "@angular/cdk/drag-drop";
+declare let $: any;
 
 @Component({
   selector: 'app-assignments',
@@ -22,7 +29,16 @@ export class AssignmentsComponent implements OnInit {
   hasNextPage: boolean;
   nextPage: number;
   img: string;
-
+ iddrag:String;
+  @ViewChild('content') content: any;
+  done = [];
+  assignment:Assignment;
+  note:number
+  nom = '';
+  matiere = '';
+  auteur = '';
+  dateRendu = null;
+  remarque = null;
   // on injecte le service de gestion des assignments
   constructor(private assignmentsService:AssignmentsService,
               private route:ActivatedRoute,
@@ -42,6 +58,23 @@ export class AssignmentsComponent implements OnInit {
       this.getAssignments();
     });
       console.log("getAssignments() du service appelé");
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+                        let id = JSON.stringify(event.container.data[event.currentIndex]["id"]).replace(/['"]+/g, '')
+                      
+                        $(this.content.nativeElement).modal('show');
+                        this.iddrag = id;  
+                        this.getAssignmentById()
+   
+                      }
   }
 
   getAssignments() {
@@ -72,8 +105,51 @@ export class AssignmentsComponent implements OnInit {
       console.log("données reçues");
     });
   }
+  getAssignmentById() {
+    // les params sont des string, on va forcer la conversion
+    // en number en mettant un "+" devant
+    const id: number = +this.iddrag;
 
+    console.log('Dans ngOnInit de details, id = ' + id);
+    this.assignmentsService.getAssignment(id).subscribe((assignment) => {
 
+      this.assignment = assignment;
+
+      this.nom = assignment.nom;
+      this.dateRendu = assignment.dateDeRendu;
+      this.auteur = assignment.auteur;
+      this.note = assignment.note;
+      this.remarque = assignment.remarque;
+      this.matiere = assignment.matiere;
+
+    });
+  }
+  updatenote(event) {
+    // on va modifier l'assignment
+console.log(this.assignment)
+    this.assignment.nom = this.nom;
+    this.assignment.dateDeRendu = this.dateRendu;
+    this.assignment.auteur =    this.auteur 
+    this.assignment.note =   this.note
+    this.assignment.remarque = this.remarque 
+    this.assignment.matiere =  this.matiere 
+    this.assignment.rendu = true;
+
+    this.assignmentsService.updateAssignment(this.assignment)
+      .subscribe(message => {
+        console.log("drag et rendu");
+
+        // et on navigue vers la page d'accueil
+        window.location.reload();
+
+      })
+
+  }
+
+  closemodal(){
+    window.location.reload();
+
+  }
 
   onDeleteAssignment(event) {
     // event = l'assignment à supprimer

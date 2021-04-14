@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AssignmentsService } from './shared/assignments.service';
 import { AuthService } from './shared/auth.service';
@@ -8,25 +8,32 @@ import { AuthService } from './shared/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Application de gestion des assignments';
-
+  public estConnecte = false;
   constructor(private authService:AuthService, private router:Router,
               private assignmentsService:AssignmentsService) {}
-
+ngOnInit(){
+ let tokenuser =  localStorage.getItem("usertoken");
+ if(tokenuser != null){
+  this.estConnecte = true
+}
+else {
+  this.estConnecte = false
+}
+}
   login() {
     // si je suis pas loggé, je me loggue, sinon, si je suis
     // loggé je me déloggue et j'affiche la page d'accueil
 
-    if(this.authService.loggedIn) {
-      // je suis loggé
-      // et bien on se déloggue
+    if(this.estConnecte) {
       this.authService.logOut();
-      // on navigue vers la page d'accueil
-      this.router.navigate(["/home"]);
+      this.router.navigate(["/login"]);
     } else {
       // je ne suis pas loggé, je me loggue
-      this.authService.logIn("admin", "toto");
+      this.estConnecte = false;
+      this.router.navigate(["/login"]);
+
     }
   }
 

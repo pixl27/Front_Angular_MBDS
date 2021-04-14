@@ -17,6 +17,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatSelectModule } from "@angular/material/select";
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 import { AssignmentsComponent } from './assignments/assignments.component';
@@ -29,13 +31,22 @@ import { Routes, RouterModule } from '@angular/router';
 import { EditAssigmentComponent } from './assignments/edit-assigment/edit-assigment.component';
 import { AuthGuard } from './shared/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { MenuComponent } from './menu/menu.component';
+import { LoginComponent } from './login/login.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 const routes:Routes = [
   {
     // indique que http://localhost:4200 sans rien ou avec un "/" à la fin
     // doit afficher le composant AssignmentsComponent (celui qui affiche la liste)
     path:"",
-    component:AssignmentsComponent
+    component:LoginComponent
+  },
+  {
+    // indique que http://localhost:4200 sans rien ou avec un "/" à la fin
+    // doit afficher le composant AssignmentsComponent (celui qui affiche la liste)
+    path:"login",
+    component:LoginComponent
   },
   {
     // idem avec  http://localhost:4200/home
@@ -64,7 +75,9 @@ const routes:Routes = [
     NonRenduDirective,
     AssignmentDetailComponent,
     AddAssignmentComponent,
-    EditAssigmentComponent
+    EditAssigmentComponent,
+    MenuComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -73,9 +86,9 @@ const routes:Routes = [
     ReactiveFormsModule,
     FormsModule,
     MatButtonModule, MatDividerModule, MatIconModule,MatSelectModule,MatTabsModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule,
-    MatNativeDateModule, MatListModule, MatCardModule, MatCheckboxModule,
-    MatSlideToggleModule,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule,MatSnackBarModule,
+    MatNativeDateModule, MatListModule, MatCardModule, MatCheckboxModule,MatGridListModule,
+    MatSlideToggleModule,DragDropModule,
     RouterModule.forRoot(routes), HttpClientModule
   ],
   providers: [],

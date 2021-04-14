@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, tap } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class AssignmentsService {
 
   getAssignmentsPagine(page:number, limit:number):Observable<any> {
 
-    return this.http.get<Assignment[]>(this.uri+"?page="+page + "&limit="+limit).pipe(
+    return this.http.get<Assignment[]>(this.uri+"?page="+page + "&limit="+limit ,{headers: new HttpHeaders({'x-access-token': localStorage.getItem("usertoken")})}).pipe(
       // traitement 1
       map(a => {
        
@@ -85,7 +85,15 @@ export class AssignmentsService {
     .pipe(
       // traitement 1
       map(a => {
-        a.nom += "";
+        for (let i = 0; i < this.matieres.length; i++) {
+          if(a.matiere == this.matieres[i]._id) {
+            a.nommatiere = this.matieres[i].nom;
+            a.matiereimage = this.matieres[i].img;
+            a.profimage = this.matieres[i].imgprof;
+            a.nomprof = this.matieres[i].nomprof;
+          }
+          }
+    
         return a;
       }),
       tap(a => {
@@ -125,7 +133,7 @@ export class AssignmentsService {
     return this.http.post(this.uri, assignment);
   }
 
-  updateAssignment(assignment:Assignment):Observable<any> {
+  updateAssignment(assignment:Assignment ):Observable<any> {
     // besoin de ne rien faire puisque l'assignment passé en paramètre
     // est déjà un élément du tableau
 
@@ -134,7 +142,7 @@ export class AssignmentsService {
     //console.log("updateAssignment l'assignment passé en param est à la position " + index + " du tableau");
     this.loggingService.log(assignment.nom, " a été modifié");
 
-    return this.http.put(this.uri, assignment);
+    return this.http.put(this.uri, assignment,{headers: new HttpHeaders({'x-access-token': localStorage.getItem("usertoken")})});
   }
 
   deleteAssignment(assignment:Assignment):Observable<any> {

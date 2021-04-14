@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { AuthService } from 'src/app/shared/auth.service';
 import { Assignment } from '../assignment.model';
-
+import {AppComponent} from '../../app.component'
 @Component({
   selector: 'app-assignment-detail',
   templateUrl: './assignment-detail.component.html',
@@ -17,7 +17,8 @@ export class AssignmentDetailComponent implements OnInit {
     private assignmentsService: AssignmentsService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService:AuthService
+    private authService:AuthService,
+    private appcomponent:AppComponent
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +76,6 @@ export class AssignmentDetailComponent implements OnInit {
   }
 
   isAdmin() {
-    return this.authService.admin;
+    return this.appcomponent.estConnecte;
   }
 }
