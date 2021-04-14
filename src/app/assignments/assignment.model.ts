@@ -7,6 +7,11 @@ export class Assignment {
   auteur: string;
   matiere: string;
   note: number ;
-  remarque: string
+  remarque: string;
+  // Affichage matiere par id
+  nommatiere:string;
+  profimage:string;
+  matiereimage:string;
+  nomprof:string;
 
 }

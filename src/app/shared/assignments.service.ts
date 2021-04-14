@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, filter, map, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, tap } from 'rxjs/operators';
 import { Assignment } from '../assignments/assignment.model';
 import { Matiere } from '../matieres/matiere.model';
 
@@ -14,8 +14,13 @@ import { assignmentsGeneres } from './data';
 export class AssignmentsService {
   assignments:Assignment[];
   matieres:Matiere[];
-
-  constructor(private loggingService:LoggingService, private http:HttpClient) { }
+  matid : Matiere;
+  constructor(private loggingService:LoggingService, private http:HttpClient) { 
+    this.getMatieres()
+    .subscribe(matieres => {
+        this.matieres = matieres as Matiere[]
+    })
+  }
 
   //uri = "http://localhost:8010/api/assignments";
   uri = "https://backendmdbs.herokuapp.com/api/assignments"
@@ -27,6 +32,10 @@ export class AssignmentsService {
     return this.http.get<Matiere[]>(this.urimatiere);
   }
 
+  getMatiere(id:string):Observable<Matiere> {
+    return this.http.get<Matiere>(this.urimatiere + "/" + id)
+  }
+
   getAssignments():Observable<Assignment[]> {
     console.log("Dans le service de gestion des assignments...")
     //return of(this.assignments);
@@ -34,7 +43,28 @@ export class AssignmentsService {
   }
 
   getAssignmentsPagine(page:number, limit:number):Observable<any> {
-    return this.http.get<Assignment[]>(this.uri+"?page="+page + "&limit="+limit);
+
+    return this.http.get<Assignment[]>(this.uri+"?page="+page + "&limit="+limit).pipe(
+      // traitement 1
+      map(a => {
+       
+     
+          for (let value of a["docs"]) {
+          //  console.log( this.getMatiere('df').subscribe())
+          for (let i = 0; i < this.matieres.length; i++) {
+          if(value.matiere == this.matieres[i]._id) {
+            value.matiereimage = this.matieres[i].img;
+            value.profimage = this.matieres[i].imgprof;
+          }
+          }
+           // console.log(value.id);
+          }
+    //      console.log(eventItem);
+     
+      return a;
+      })
+    );
+
   }
 
   // Pour votre culture, on peut aussi utiliser httpClient avec une promesse

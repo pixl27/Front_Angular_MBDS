@@ -21,24 +21,83 @@
     </button>
   </nav>
 
-  <mat-list *ngFor="let a of assignments">
-    <nav>
-      <a routerLink="/assignment/{{a.id}}">
-        <h3 mat-subheader>{{a.dateDeRendu | date}}</h3>
-        <mat-list-item>
-          <mat-divider></mat-divider>
+  <mat-tab-group>
+    <mat-tab label="Rendu"> 
+      <mat-list *ngFor="let a of assignmentsR">
+          <mat-card  class="example-card">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url(../../assets/image/' +a.profimage+')','background-size': 'cover'}"></div>
+              <mat-card-title>{{a.nom}}</mat-card-title>
+              <mat-card-subtitle>{{a.auteur}}</mat-card-subtitle>
+            </mat-card-header>
+            <img
+              mat-card-image
+              src="../../assets/image/{{a.matiereimage}}"
+              alt="Photo of a Shiba Inu"
+            />
+            <mat-card-content>
+              <mat-list-item>
+                <mat-divider></mat-divider>
+                <p *ngIf="a.rendu; else nonsoumis" appRendu>
+                  {{a.nom}}, rendu par l'élève.
+                </p>
+                <ng-template #nonsoumis>
+                  <p appNonRendu>
+                    {{a.nom}}, non encore rendu par l'élève.
+                  </p>
+                </ng-template>
+      
+              </mat-list-item>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button> <a routerLink="/assignment/{{a.id}}">
+                <h3 mat-subheader>Detail
+                </h3>
+        
+              </a></button>
+            </mat-card-actions>
+          </mat-card>
+      </mat-list>
 
-          <p *ngIf="a.rendu; else nonsoumis" appRendu>
-            {{a.nom}}, rendu par l'élève.
-          </p>
-          <ng-template #nonsoumis>
-            <p appNonRendu>
-              {{a.nom}}, non encore rendu par l'élève.
-            </p>
-          </ng-template>
+    </mat-tab>
+    <mat-tab label="Non Rendu">
+      <mat-list *ngFor="let a of assignmentsNR">
+        <mat-card  class="example-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url(../../assets/image/' +a.profimage+')','background-size': 'cover'}"></div>
+            <mat-card-title>{{a.nom}}</mat-card-title>
+            <mat-card-subtitle>{{a.auteur}}</mat-card-subtitle>
+          </mat-card-header>
+          <img
+            mat-card-image
+            src="../../assets/image/{{a.matiereimage}}"
+            alt="Photo of a Shiba Inu"
+          />
+          <mat-card-content>
+            <mat-list-item>
+              <mat-divider></mat-divider>
+              <p *ngIf="a.rendu; else nonsoumis" appRendu>
+                {{a.nom}}, rendu par l'élève.
+              </p>
+              <ng-template #nonsoumis>
+                <p appNonRendu>
+                  {{a.nom}}, non encore rendu par l'élève.
+                </p>
+              </ng-template>
+    
+            </mat-list-item>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button> <a routerLink="/assignment/{{a.id}}">
+              <h3 mat-subheader>Detail
+              </h3>
+      
+            </a></button>
+          </mat-card-actions>
+        </mat-card>
+    </mat-list>
+    </mat-tab>
+  </mat-tab-group>
 
-        </mat-list-item>
-      </a>
-    </nav>
-  </mat-list>
+  
 </main>

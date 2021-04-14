@@ -6,3 +6,6 @@
 .ajouterBtn {
   align-self: flex-end;
 }
+.example-card {
+  max-width: 400px;
+}

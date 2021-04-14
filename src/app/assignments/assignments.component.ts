@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Matiere } from '../matieres/matiere.model';
 import { AssignmentsService } from '../shared/assignments.service';
 import { Assignment } from './assignment.model';
 
@@ -10,6 +11,8 @@ import { Assignment } from './assignment.model';
 })
 export class AssignmentsComponent implements OnInit {
   assignments:Assignment[];
+  assignmentsR:Assignment[];
+  assignmentsNR:Assignment[];
   page: number=1;
   limit: number=10;
   totalDocs: number;
@@ -18,6 +21,7 @@ export class AssignmentsComponent implements OnInit {
   prevPage: number;
   hasNextPage: boolean;
   nextPage: number;
+  img: string;
 
   // on injecte le service de gestion des assignments
   constructor(private assignmentsService:AssignmentsService,
@@ -26,8 +30,11 @@ export class AssignmentsComponent implements OnInit {
 
   ngOnInit() {
     console.log('AVANT AFFICHAGE');
+    //
+
     // on regarde s'il y a page= et limit = dans l'URL
     this.route.queryParams.subscribe(queryParams => {
+      
       console.log("Dans le subscribe des queryParams")
       this.page = +queryParams.page || 1;
       this.limit = +queryParams.limit || 10;
@@ -40,7 +47,20 @@ export class AssignmentsComponent implements OnInit {
   getAssignments() {
     this.assignmentsService.getAssignmentsPagine(this.page, this.limit)
     .subscribe(data => {
+      this.assignmentsR = [];
+      this.assignmentsNR = [];
+      this.assignments = [];
       this.assignments = data.docs;
+
+      for(let i=0;i<this.assignments.length;i++){
+        if(this.assignments[i].rendu){
+          this.assignmentsR.push(this.assignments[i]);
+        }
+        else{
+          this.assignmentsNR.push(this.assignments[i]);
+        }
+    }
+
       this.page = data.page;
       this.limit = data.limit;
       this.totalDocs = data.totalDocs;
@@ -53,6 +73,8 @@ export class AssignmentsComponent implements OnInit {
     });
   }
 
+
+
   onDeleteAssignment(event) {
     // event = l'assignment à supprimer
 
@@ -62,6 +84,7 @@ export class AssignmentsComponent implements OnInit {
         console.log(message);
       })
   }
+
 
   premierePage() {
     this.router.navigate(['/home'], {

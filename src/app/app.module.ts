@@ -16,6 +16,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatSelectModule } from "@angular/material/select";
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 import { AssignmentsComponent } from './assignments/assignments.component';
@@ -71,7 +72,7 @@ const routes:Routes = [
     MatStepperModule,
     ReactiveFormsModule,
     FormsModule,
-    MatButtonModule, MatDividerModule, MatIconModule,MatSelectModule,
+    MatButtonModule, MatDividerModule, MatIconModule,MatSelectModule,MatTabsModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule,
     MatNativeDateModule, MatListModule, MatCardModule, MatCheckboxModule,
     MatSlideToggleModule,
