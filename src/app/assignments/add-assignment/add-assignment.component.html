@@ -19,7 +19,7 @@
         <mat-form-field appearance="fill">
          
           <mat-label>Choisissez une date</mat-label>
-          <input matInput [matDatepicker]="picker" required [(ngModel)]="dateDeRendu" formControlName="firstCtrl2" name="date">
+          <input matInput [matDatepicker]="picker" (dateChange)="easter($event)" required [(ngModel)]="dateDeRendu" formControlName="firstCtrl2" name="date">
       
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       
@@ -28,32 +28,43 @@
         </mat-form-field>
       </div>
         <div>
-          <button type="button"  mat-button matStepperNext>Next</button>
+          <button type="button"  mat-button matStepperNext>Suivant</button>
         </div>
       </ng-form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
       <ng-form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Assigner un matiere a ce devoir</ng-template>
-        <h4>Basic native select</h4>
+        <h4>Choisissez une Matiere</h4>
 
           <mat-form-field appearance="fill">
-            <mat-select [(ngModel)]="matiere" formControlName="secondCtrl">
+            <mat-select (selectionChange)="onChange($event)" [(ngModel)]="matiere" formControlName="secondCtrl">
               <mat-option *ngFor="let matiere of listeMatieres" [value]="matiere._id">
                 {{matiere.nom}}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <div>
+            <img *ngIf="showmatiereview"
+            mat-card-image width="250px"
+            src="../../assets/image/{{matiereview.img}}"
+            alt="Photo of a Shiba Inu"
+          />
+        </div>
+         
+            <div>
+              <p *ngIf="showmatiereview"> Nom du Prof : {{matiereview.nomprof}}</p>
+          </div>
         <div>
-          <button type="button" mat-button matStepperNext>Next</button>
+          <button type="button" mat-button matStepperNext>Suivant</button>
         </div>
       </ng-form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
+      <ng-template matStepLabel>Fini</ng-template>
+      
       <div>
-        <button type="button"  mat-button  matStepperPrevious>Back</button>
+        <button type="button"  mat-button  matStepperPrevious>Revenir</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
         <button type="button"  type="submit" mat-stroked-button color="primary">
           Ajouter un devoir

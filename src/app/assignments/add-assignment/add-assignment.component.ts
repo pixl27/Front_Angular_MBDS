@@ -4,7 +4,6 @@ import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../assignment.model';
 import {FormBuilder, FormGroup , Validators} from '@angular/forms';
 import { Matiere } from 'src/app/matieres/matiere.model';
-
 @Component({
   selector: 'app-add-assignment',
   templateUrl: './add-assignment.component.html',
@@ -22,12 +21,12 @@ export class AddAssignmentComponent implements OnInit {
   isLinear = true;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-
+  matiereview:Matiere;
+  showmatiereview= false;
   constructor(private assignmentsService:AssignmentsService,
               private router:Router,private _formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-   
     this.assignmentsService.getMatieres()
     .subscribe(matieres => {
         this.listeMatieres = matieres as Matiere[]
@@ -43,7 +42,33 @@ export class AddAssignmentComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
   }
+  easter(event){
+
+    if(this.dateDeRendu.getTime() == new Date("03/11/2021").getTime()){
+      let audio = new Audio();
+      audio.src = "../../assets/image/easteregg.mp3";
+      audio.load();
+      audio.play();
+    }
+ 
+  }
+
+  onChange(deviceValue) {
+    
+    this.assignmentsService.getMatiere(this.matiere).subscribe((matiere) => {
+      this.matiereview = matiere;
+      console.log(this.matiereview.nomprof)
+     this.show();
+     
+    });
+
+ 
+}
   
+  show() {
+    this.showmatiereview = true;
+
+  }
 
   onSubmit(event) {
     console.log(this.nom + " " + this.matiere);

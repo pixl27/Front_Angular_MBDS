@@ -22,26 +22,21 @@ else {
   this.estConnecte = false
 }
 }
-  login() {
-    // si je suis pas loggé, je me loggue, sinon, si je suis
-    // loggé je me déloggue et j'affiche la page d'accueil
-
+  login(event) {
     if(this.estConnecte) {
       this.authService.logOut();
       this.router.navigate(["/login"]);
     } else {
       // je ne suis pas loggé, je me loggue
       this.estConnecte = false;
+      event.source.checked = false;
       this.router.navigate(["/login"]);
 
     }
   }
 
   peuplerBD() {
-    // version naive et simple
-    //this.assignmentsService.peuplerBD();
 
-    // meilleure version :
     this.assignmentsService.peuplerBDAvecForkJoin()
       .subscribe(() => {
         console.log("LA BD A ETE PEUPLEE, TOUS LES ASSIGNMENTS AJOUTES, ON RE-AFFICHE LA LISTE");

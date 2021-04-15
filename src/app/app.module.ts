@@ -34,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MenuComponent } from './menu/menu.component';
 import { LoginComponent } from './login/login.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { GameComponent } from './game/game.component';
 
 const routes:Routes = [
   {
@@ -77,7 +78,8 @@ const routes:Routes = [
     AddAssignmentComponent,
     EditAssigmentComponent,
     MenuComponent,
-    LoginComponent
+    LoginComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,

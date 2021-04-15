@@ -39,6 +39,7 @@ export class AssignmentsComponent implements OnInit {
   auteur = '';
   dateRendu = null;
   remarque = null;
+  estco = localStorage.getItem("usertoken");
   // on injecte le service de gestion des assignments
   constructor(private assignmentsService:AssignmentsService,
               private route:ActivatedRoute,
@@ -126,28 +127,34 @@ export class AssignmentsComponent implements OnInit {
   }
   updatenote(event) {
     // on va modifier l'assignment
-console.log(this.assignment)
-    this.assignment.nom = this.nom;
-    this.assignment.dateDeRendu = this.dateRendu;
-    this.assignment.auteur =    this.auteur 
-    this.assignment.note =   this.note
-    this.assignment.remarque = this.remarque 
-    this.assignment.matiere =  this.matiere 
-    this.assignment.rendu = true;
-
-    this.assignmentsService.updateAssignment(this.assignment)
-      .subscribe(message => {
-        console.log("drag et rendu");
-
-        // et on navigue vers la page d'accueil
-        window.location.reload();
-
-      })
+    if(this.note < 0 || this.note > 20)
+    alert("La note doit etre entre 0 et 20")
+    else{
+      this.assignment.nom = this.nom;
+      this.assignment.dateDeRendu = this.dateRendu;
+      this.assignment.auteur =    this.auteur 
+      this.assignment.note =   this.note
+      this.assignment.remarque = this.remarque 
+      this.assignment.matiere =  this.matiere 
+      this.assignment.rendu = true;
+  
+      this.assignmentsService.updateAssignment(this.assignment)
+        .subscribe(message => {
+          console.log("drag et rendu");
+  
+          // et on navigue vers la page d'accueil
+          window.location.reload();
+  
+        })
+    }
+   
 
   }
 
   closemodal(){
-    window.location.reload();
+    this.assignmentsNR.push(this.done[0])
+    this.done = []
+   // window.location.reload();
 
   }
 
@@ -193,7 +200,7 @@ console.log(this.assignment)
     });
   }
 
-  dernierePage() {
+  public dernierePage() {
     this.router.navigate(['/home'], {
       queryParams: {
         page:this.totalPages,

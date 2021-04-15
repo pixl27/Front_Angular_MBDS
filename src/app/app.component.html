@@ -25,7 +25,7 @@
         <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Deconnexion</a>
+    
       </li>
     </ul>
 
@@ -105,10 +105,16 @@
                   <a routerLink="/add"> Ajouter Assignments </a>
                 </a>
               </li>
-             
-              
+
             </ul>
+         
           </li>
+          <mat-slide-toggle style="margin-left: 20px;" [checked]="estConnecte" (change)="login($event)">
+            <p  *ngIf="estConnecte" style="margin-top: 15px;color: antiquewhite;"> Déconnexion</p>
+            <p  *ngIf="!estConnecte"style="margin-top: 15px;color: antiquewhite;"> connexion</p>
+
+          </mat-slide-toggle>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -123,14 +129,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">Application gestion des Assignments</h1>
           </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a routerLink="/home"> Acceuil </a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div><!-- /.col -->
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -140,7 +141,7 @@
     <section class="content">
 
 <!-- Indique qu'on affichera le composant qui correspond à l'URL courant -->
-<mat-slide-toggle [checked]="estConnecte" (click)="login()">Log me!</mat-slide-toggle>
+
 
 <router-outlet></router-outlet>
 

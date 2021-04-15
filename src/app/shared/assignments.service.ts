@@ -166,7 +166,9 @@ export class AssignmentsService {
       nouvelAssignment.id = a.id;
       nouvelAssignment.dateDeRendu = new Date(a.dateDeRendu);
       nouvelAssignment.rendu = a.rendu;
-
+      nouvelAssignment.matiere = a.matiere
+      nouvelAssignment.note = a.note;
+      nouvelAssignment.remarque = a.remarque;
       this.addAssignment(nouvelAssignment)
       .subscribe(reponse => {
         console.log(reponse.message);
@@ -186,7 +188,10 @@ export class AssignmentsService {
       nouvelAssignment.nom = a.nom;
       nouvelAssignment.dateDeRendu = new Date(a.dateDeRendu);
       nouvelAssignment.rendu = a.rendu;
-
+      nouvelAssignment.matiere = a.matiere
+      nouvelAssignment.auteur = a.auteur;
+      nouvelAssignment.note = a.note;
+      nouvelAssignment.remarque = a.remarque;
       appelsVersAddAssignment.push(this.addAssignment(nouvelAssignment));
     });
     return forkJoin(appelsVersAddAssignment); // renvoie un seul Observable pour dire que c'est fini
