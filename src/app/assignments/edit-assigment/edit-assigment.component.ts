@@ -24,8 +24,8 @@ export class EditAssigmentComponent implements OnInit {
   isLinear = true;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-
-
+  matiereview:Matiere;
+  showmatiereview= false;
   constructor(
     private assignmentsService: AssignmentsService,
     private route: ActivatedRoute,
@@ -81,6 +81,22 @@ export class EditAssigmentComponent implements OnInit {
       this.matiere = assignment.matiere;
 
     });
+  }
+  onChange(deviceValue) {
+    
+    this.assignmentsService.getMatiere(this.matiere).subscribe((matiere) => {
+      this.matiereview = matiere;
+      console.log(this.matiereview.nomprof)
+     this.show();
+     
+    });
+
+ 
+}
+  
+  show() {
+    this.showmatiereview = true;
+
   }
 
 

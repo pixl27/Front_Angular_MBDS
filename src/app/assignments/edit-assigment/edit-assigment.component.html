@@ -38,20 +38,24 @@
         <h4>Modifier la matiere , ajouter un note et un remarque</h4>
 
           <mat-form-field appearance="fill">
-            <mat-select [(ngModel)]="matiere" formControlName="secondCtrl">
+            <mat-select (selectionChange)="onChange($event)" [(ngModel)]="matiere" formControlName="secondCtrl">
               <mat-option *ngFor="let matiere of listeMatieres" [value]="matiere._id">
                 {{matiere.nom}}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <img *ngIf="showmatiereview"
+          mat-card-image
+          src="../../assets/image/{{matiereview.img}}"
+          alt="Photo of a Shiba Inu"
+        />
+        <p *ngIf="showmatiereview">{{matiereview.nomprof}}</p>
           <div>
-          <mat-form-field>
-            <input matInput type="number" placeholder="Note"  required [(ngModel)]="note" formControlName="secondCtrl2" name="note">
-          </mat-form-field>
         </div>
         <div>
           <mat-form-field>
             <input matInput placeholder="remarque"  [(ngModel)]="remarque" formControlName="secondCtrl3" name="remarque">
+       
           </mat-form-field>
         </div>
         <div>

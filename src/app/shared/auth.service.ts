@@ -13,7 +13,7 @@ import { assignmentsGeneres } from './data';
 })
 export class AuthService {
   loggedIn = false;
-  admin = false;
+  admin = true;
 
   constructor(private loggingService:LoggingService, private http:HttpClient) { 
    
